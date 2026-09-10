@@ -1,0 +1,45 @@
+HELP.md
+target/
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+# 本地运行数据与敏感配置
+uploads/
+.uploads/
+logs/
+cookies.txt
+
+# 与项目无关的个人文件
+resume-city-travel/
+.env
+.env.*
+application-local.properties
+src/main/resources/application-local.properties
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+.sts4-cache
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+### NetBeans ###
+/nbproject/private/
+/nbbuild/
+/dist/
+/nbdist/
+/.nb-gradle/
+build/
+!**/src/main/**/build/
+!**/src/test/**/build/
+
+### VS Code ###
+.vscode/
