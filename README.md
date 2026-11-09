@@ -1,5 +1,7 @@
 # 城市轻旅行攻略与预订小站
 
+[![CI](https://github.com/cck-10086/city-travel/actions/workflows/ci.yml/badge.svg)](https://github.com/cck-10086/city-travel/actions/workflows/ci.yml)
+
 面向城市短途旅行场景的全栈课程项目，覆盖景点、民宿、路线、攻略、订单、评论、收藏、审核与数据统计，并集成 DeepSeek 生成结构化行程。
 
 ## 界面预览
