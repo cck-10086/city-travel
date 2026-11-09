@@ -43,3 +43,6 @@ build/
 
 ### VS Code ###
 .vscode/
+
+# 本地截图与临时产物
+docs/screenshots/*.tmp

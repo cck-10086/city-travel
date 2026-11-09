@@ -40,6 +40,7 @@ class OrderControllerTest {
         attraction.setStock(10);
         attraction.setStatus(1);
         when(attractionService.getById(7L)).thenReturn(attraction);
+        when(attractionService.deductStock(7L, 2)).thenReturn(true);
         when(orderService.generateOrderNo()).thenReturn("ORDER-1");
 
         Order order = new Order();

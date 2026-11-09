@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.citytravel.citytravel.common.Result;
+import com.citytravel.citytravel.util.PageUtil;
 import com.citytravel.citytravel.entity.Comment;
 import com.citytravel.citytravel.entity.Favorite;
 import com.citytravel.citytravel.entity.Strategy;
@@ -50,7 +51,7 @@ public class StrategyController extends BaseController {
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword) {
-        Page<Strategy> page = new Page<>(pageNum, pageSize);
+        Page<Strategy> page = new Page<>(PageUtil.pageNum(pageNum), PageUtil.pageSize(pageSize));
         LambdaQueryWrapper<Strategy> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Strategy::getStatus, 1);
         if (keyword != null && !keyword.isEmpty()) {

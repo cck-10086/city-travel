@@ -138,3 +138,20 @@ CREATE TABLE IF NOT EXISTS `order_evaluation` (
     `create_time` DATETIME DEFAULT CURRENT_TIMESTAMP,
     INDEX `idx_order_evaluation_user_id` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ===== 索引补齐 =====
+-- 订单按用户查「我的订单」、按状态筛、按商品关联商家，这三个是最热查询路径
+CREATE INDEX `idx_orders_user_id` ON `orders` (`user_id`);
+CREATE INDEX `idx_orders_status` ON `orders` (`status`);
+CREATE INDEX `idx_orders_product` ON `orders` (`product_type`, `product_id`);
+-- 攻略列表按 status=1 + views 倒序
+CREATE INDEX `idx_strategy_status_views` ON `strategy` (`status`, `views`);
+-- 评论按商品维度拉列表
+CREATE INDEX `idx_comment_ref` ON `comment` (`type`, `ref_id`);
+CREATE INDEX `idx_comment_strategy` ON `comment` (`strategy_id`);
+-- 收藏按用户维度查
+CREATE INDEX `idx_favorite_user` ON `favorite` (`user_id`);
+CREATE INDEX `idx_favorite_ref` ON `favorite` (`type`, `ref_id`);
+-- 景点/民宿按状态 + 分类筛选
+CREATE INDEX `idx_attraction_status` ON `attraction` (`status`);
+CREATE INDEX `idx_homestay_status` ON `homestay` (`status`);

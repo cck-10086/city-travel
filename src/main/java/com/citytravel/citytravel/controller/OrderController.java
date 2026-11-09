@@ -7,6 +7,7 @@ import com.citytravel.citytravel.common.Result;
 import com.citytravel.citytravel.entity.*;
 import com.citytravel.citytravel.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
@@ -40,6 +41,7 @@ public class OrderController extends BaseController {
     }
     
     @PostMapping
+    @Transactional(rollbackFor = Exception.class)
     public Result<Order> create(@RequestBody Order order, HttpSession session) {
         User currentUser = getCurrentUser(session);
         if (currentUser == null) {
@@ -49,12 +51,42 @@ public class OrderController extends BaseController {
         if (validationError != null) {
             return Result.error(400, validationError);
         }
+        // 先原子扣减库存，再落订单。扣减失败说明并发下单把库存抢光了，
+        // 直接返回库存不足，避免超卖。
+        if (!deductStock(order)) {
+            return Result.error(400, "库存不足");
+        }
         order.setUserId(currentUser.getId());
         order.setOrderNo(orderService.generateOrderNo());
         order.setStatus("unpaid");
         order.setCreateTime(LocalDateTime.now());
         orderService.save(order);
         return Result.success(order);
+    }
+
+    /**
+     * 按商品类型原子扣减库存。路线（route）没有库存字段，直接视为可下单。
+     */
+    private boolean deductStock(Order order) {
+        if ("attraction".equals(order.getProductType())) {
+            return attractionService.deductStock(order.getProductId(), order.getQuantity());
+        }
+        if ("homestay".equals(order.getProductType())) {
+            return homestayService.deductStock(order.getProductId(), order.getQuantity());
+        }
+        return true;
+    }
+
+    /** 归还库存，订单取消时调用 */
+    private void restoreStock(Order order) {
+        if (order.getQuantity() == null) {
+            return;
+        }
+        if ("attraction".equals(order.getProductType())) {
+            attractionService.restoreStock(order.getProductId(), order.getQuantity());
+        } else if ("homestay".equals(order.getProductType())) {
+            homestayService.restoreStock(order.getProductId(), order.getQuantity());
+        }
     }
     
     @PostMapping("/pay/{id}")
@@ -128,6 +160,7 @@ public class OrderController extends BaseController {
     }
     
     @DeleteMapping("/{id}")
+    @Transactional(rollbackFor = Exception.class)
     public Result<Void> delete(@PathVariable Long id, HttpSession session) {
         User currentUser = getCurrentUser(session);
         if (currentUser == null) {
@@ -143,11 +176,13 @@ public class OrderController extends BaseController {
             return Result.error("只能取消自己的订单");
         }
         
-        if ("paid".equals(existing.getStatus())) {
-            return Result.error("已支付的订单无法取消");
+        if ("paid".equals(existing.getStatus()) || "used".equals(existing.getStatus())) {
+            return Result.error("已支付或已核销的订单无法取消");
         }
         
         orderService.removeById(id);
+        // 订单取消后把库存还回去，否则库存只减不增
+        restoreStock(existing);
         return Result.success();
     }
     

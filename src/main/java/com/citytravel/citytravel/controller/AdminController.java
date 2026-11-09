@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.citytravel.citytravel.common.Result;
+import com.citytravel.citytravel.util.PageUtil;
 import com.citytravel.citytravel.entity.*;
 import com.citytravel.citytravel.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,7 @@ public class AdminController extends BaseController {
             return Result.error("无权限");
         }
         
-        Page<User> pageRequest = new Page<>(page, size);
+        Page<User> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         
         if (username != null && !username.isEmpty()) {
@@ -162,7 +163,7 @@ public class AdminController extends BaseController {
             return Result.error("无权限");
         }
         
-        Page<User> pageRequest = new Page<>(page, size);
+        Page<User> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(User::getRole, UserService.ROLE_MERCHANT);
         
@@ -225,7 +226,7 @@ public class AdminController extends BaseController {
             return Result.error("无权限");
         }
         
-        Page<Attraction> pageRequest = new Page<>(page, size);
+        Page<Attraction> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Attraction> wrapper = new LambdaQueryWrapper<>();
         
         if (name != null && !name.isEmpty()) {
@@ -295,7 +296,7 @@ public class AdminController extends BaseController {
             return Result.error("无权限");
         }
         
-        Page<Homestay> pageRequest = new Page<>(page, size);
+        Page<Homestay> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Homestay> wrapper = new LambdaQueryWrapper<>();
         
         if (name != null && !name.isEmpty()) {
@@ -365,7 +366,7 @@ public class AdminController extends BaseController {
             return Result.error("无权限");
         }
         
-        Page<Route> pageRequest = new Page<>(page, size);
+        Page<Route> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Route> wrapper = new LambdaQueryWrapper<>();
         
         if (name != null && !name.isEmpty()) {
@@ -435,7 +436,7 @@ public class AdminController extends BaseController {
             return Result.error("无权限");
         }
         
-        Page<Strategy> pageRequest = new Page<>(page, size);
+        Page<Strategy> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Strategy> wrapper = new LambdaQueryWrapper<>();
         
         if (title != null && !title.isEmpty()) {
@@ -503,7 +504,7 @@ public class AdminController extends BaseController {
             return Result.error("无权限");
         }
         
-        Page<Order> pageRequest = new Page<>(page, size);
+        Page<Order> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>();
         
         if (orderNo != null && !orderNo.isEmpty()) {
@@ -637,7 +638,7 @@ public class AdminController extends BaseController {
             return Result.error("无权限");
         }
         
-        Page<Strategy> pageRequest = new Page<>(page, size);
+        Page<Strategy> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Strategy> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Strategy::getStatus, 0);
         wrapper.orderByDesc(Strategy::getCreateTime);

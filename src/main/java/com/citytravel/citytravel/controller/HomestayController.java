@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.citytravel.citytravel.common.Result;
+import com.citytravel.citytravel.util.PageUtil;
 import com.citytravel.citytravel.entity.Favorite;
 import com.citytravel.citytravel.entity.Homestay;
 import com.citytravel.citytravel.entity.User;
@@ -48,7 +49,7 @@ public class HomestayController {
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String keyword,
             @RequestParam(required = false) Long categoryId) {
-        Page<Homestay> page = new Page<>(pageNum, pageSize);
+        Page<Homestay> page = new Page<>(PageUtil.pageNum(pageNum), PageUtil.pageSize(pageSize));
         LambdaQueryWrapper<Homestay> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Homestay::getStatus, 1);
         if (categoryId != null) {

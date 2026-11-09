@@ -19,7 +19,13 @@ public class UserController {
     
     @PostMapping("/login")
     public Result<User> login(@Valid @RequestBody User user, HttpServletRequest request) {
-        User loginUser = userService.login(user.getUsername(), user.getPassword());
+        User loginUser;
+        try {
+            loginUser = userService.login(user.getUsername(), user.getPassword());
+        } catch (IllegalStateException e) {
+            // 连续失败过多，账号临时锁定
+            return Result.error(429, e.getMessage());
+        }
         if (loginUser != null) {
             HttpSession session = request.getSession();
             request.changeSessionId();

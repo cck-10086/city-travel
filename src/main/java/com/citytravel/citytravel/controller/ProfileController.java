@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.citytravel.citytravel.common.Result;
+import com.citytravel.citytravel.util.PageUtil;
 import com.citytravel.citytravel.entity.*;
 import com.citytravel.citytravel.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,7 +143,7 @@ public class ProfileController extends BaseController {
         }
         
         User user = getCurrentUser(session);
-        Page<Order> pageRequest = new Page<>(page, size);
+        Page<Order> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Order> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Order::getUserId, user.getId());
         
@@ -186,7 +187,7 @@ public class ProfileController extends BaseController {
         }
         
         User user = getCurrentUser(session);
-        Page<Favorite> pageRequest = new Page<>(page, size);
+        Page<Favorite> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Favorite> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Favorite::getUserId, user.getId());
         wrapper.orderByDesc(Favorite::getCreateTime);
@@ -296,7 +297,7 @@ public class ProfileController extends BaseController {
         }
         
         User user = getCurrentUser(session);
-        Page<Comment> pageRequest = new Page<>(page, size);
+        Page<Comment> pageRequest = new Page<>(PageUtil.pageNum(page), PageUtil.pageSize(size));
         LambdaQueryWrapper<Comment> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(Comment::getUserId, user.getId());
         wrapper.orderByDesc(Comment::getCreateTime);

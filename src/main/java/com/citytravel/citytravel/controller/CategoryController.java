@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.citytravel.citytravel.common.Result;
+import com.citytravel.citytravel.util.PageUtil;
 import com.citytravel.citytravel.entity.Category;
 import com.citytravel.citytravel.entity.User;
 import com.citytravel.citytravel.service.CategoryService;
@@ -39,7 +40,7 @@ public class CategoryController extends BaseController {
             @RequestParam(defaultValue = "1") Integer pageNum,
             @RequestParam(defaultValue = "10") Integer pageSize,
             @RequestParam(required = false) String type) {
-        Page<Category> page = new Page<>(pageNum, pageSize);
+        Page<Category> page = new Page<>(PageUtil.pageNum(pageNum), PageUtil.pageSize(pageSize));
         LambdaQueryWrapper<Category> wrapper = new LambdaQueryWrapper<>();
         if (type != null && !type.isEmpty()) {
             wrapper.eq(Category::getType, type);
